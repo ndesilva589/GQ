@@ -1,0 +1,724 @@
+<!doctype html>
+<!--[if lt IE 8 ]>
+<html lang="en" class="no-js ie ie7 dark_"><![endif]-->
+<!--[if IE 8 ]>
+<html lang="en" class="no-js ie dark_"><![endif]-->
+<!--[if (gt IE 8)|!(IE)]><!-->
+<html lang="en" class="no-js dark_"><!--<![endif]-->
+
+<!-- Mirrored from ecsrates.gotquotes.com/index.php/rates/start_quote/8QJuLXiOBU9l8Qdsp9xlEdB8FT9TneU~bp6T0fE67iGivBJXn98ZSgQiqSz~NYO92S6cNnub7BxJPNpmby.USg--?tsr=mycampaign by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 21 Sep 2022 19:45:32 GMT -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+    <title>Warranty Rates</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Global stylesheets -->
+
+    <link href="../../../css/reset.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/common.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/form.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/standard-alt.css" rel="stylesheet" type="text/css">
+
+    <!-- Comment/uncomment one of these files to toggle between fixed and fluid layout -->
+    <!--<link href="css/960.gs.css" rel="stylesheet" type="text/css">-->
+
+    <link href="../../../css/960.gs.fluid.css" rel="stylesheet" type="text/css">
+    
+    <!-- Custom styles -->
+    <link href="../../../css/simple-lists.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/block-lists.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/planning.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/table.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/calendars.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/wizard.css" rel="stylesheet" type="text/css">
+    <link href="../../../css/gallery.css" rel="stylesheet" type="text/css">
+
+
+
+    <!-- Modernizr for support detection, all javascript libs are moved right above </body> for better performance -->
+
+    <script src="../../../js/libs/modernizr.custom.min.js"></script>
+
+    <!--
+
+Updated as v1.5:
+Libs are moved here to improve performance
+
+-->
+
+    <!-- Generic libs -->
+    <script src="../../../js/libs/jquery-1.6.3.min.js"></script>
+    <script src="../../../js/old-browsers.js"></script>
+    <script src="../../../js/libs/jquery.hashchange.js"></script>
+
+    <!-- Template libs -->
+
+    <script src="../../../js/jquery.accessibleList.js"></script>
+    <script src="../../../js/searchField.js"></script>
+    <script src="../../../js/common.js"></script>
+    <script src="../../../js/standard.js"></script>
+
+    <!--[if lte IE 8]><script src="http://ecsrates.gotquotes.com/js/standard.ie.js"></script>
+<![endif]-->
+
+    <script src="../../../js/jquery.tip.js"></script>
+    <script src="../../../js/jquery.contextMenu.js"></script>
+    <script src="../../../js/jquery.modal.js"></script>
+
+    <!-- Custom styles lib -->
+
+    <script src="../../../js/list.js"></script>
+
+    <!-- Plugins -->
+
+    <script src="../../../js/libs/jquery.dataTables.min.js"></script>
+    <script src="../../../js/libs/jquery.datepick/jquery.datepick.min.js"></script>
+
+    <!-- Form Validation -->
+    <script src="../../../js/jquery.formvalidation.js"></script>
+
+    <!-- Charts library -->
+    <script src="../../../js/libs/chart/highcharts.js"></script>
+
+    <!-- Charts library -->
+    <script src="../../../js/jquery.base64.js"></script>
+    <script src="../../../js/jquery.maskedinput.js"></script>
+
+    <script src="../../../js/jquery.creditCardValidator.js"></script>
+
+
+</head>
+<body>
+
+<!-- Header -->
+
+
+<!-- End header -->    
+
+<script type="text/javascript">
+
+$(document).ready(function () {
+
+
+    var year = '';
+    var make = '';
+
+    $("#year").change(function () {
+
+        year = $(this).val();
+
+        $("#model").html('<option value="">-----Choose one-----</option>');
+        $("#make").html('<option>Loading ............</option>');
+
+        $.ajax({
+            type: "POST",
+            data: "year=" + year,
+            url: "http://ecsrates.gotquotes.com/index.php/get_data/get_make",
+            success: function (msg) {
+                if (msg != '') {
+                    $("#make").html(msg).show();
+
+                } else {
+                    $("#make").html('<option value="">-----Choose one-----</option>');
+
+                }
+            }
+        });
+    });
+
+    $("#make").change(function () {
+        $("#model").html('<option value="">Loading ............</option>');
+        make = $(this).val();
+        year = $('#year').val();
+        $.ajax({
+            type: "POST",
+            data: "year=" + year + "&make=" + make,
+            url: "http://ecsrates.gotquotes.com/index.php/get_data/get_model",
+            success: function (msg) {
+                if (msg != '') {
+                    $("#model").html(msg).show();
+
+                } else {
+                    $("#model").html('<option value="">-----Choose one-----</option>');
+
+                }
+            }
+        });
+    });
+
+    $("#model").change(function () {
+        $("#model_type").html('<option value="">Loading ............</option>');
+        make = $('#make').val();
+        year = $('#year').val();
+        model = $(this).val();
+        $.ajax({
+            type: "POST",
+            data: "year=" + year + "&make=" + make + "&model=" + model,
+            url: "http://ecsrates.gotquotes.com/index.php/get_data/get_model_type",
+            success: function (msg) {
+                if (msg != '') {
+                    $("#model_type").html(msg).show();
+
+                } else {
+                    $("#model_type").html('<option value="">-----Choose one-----</option>');
+
+                }
+            }
+        });
+    });
+
+    //Next Button
+    $('#next_btn').click(function () {
+
+        var state = $('#state').val();
+
+        if (state == '') {
+            $('#state').addClass('error');
+            $('#rates_box_error').html("<li>Please select <strong>STATE</strong></li>").show().delay(2000).fadeOut(1500);
+
+        } else {
+            $('#tab-auto').showTab();
+        }
+
+
+    });
+
+    //State Change
+    $('#state').change(function () {
+
+        var state = $('#state').val();
+
+        if (state != '') $('#state').removeClass('error');
+
+
+    });
+
+
+    $('#sq_btn').live("click", function () {
+
+
+        var state = $('#state').val();
+
+        var year = $('#year').val();
+        var model = $('#model').val();
+        var make = $('#make').val();
+        var milage = $('#milage').val();
+        var model_type = $('#model_type').val();
+
+        var vin = $('#vin').val();
+
+        var tsr = $('#tsr').val();
+
+        var error = '';
+
+        $('input , select').removeClass('error');
+
+        if (state == '') {
+            $('#state').addClass('error');
+
+            error = error + "<li>Please select <strong>STATE</strong></li>";
+
+            $('#tab-person').showTab();
+        }
+
+        if (milage == '') {
+            $('#milage').addClass('error');
+
+            error = error + "<li>Please insert <strong>MILEAGE</strong></li>";
+        }
+
+        if (tsr == '') {
+            $('#tsr').addClass('error');
+            error = error + "<li>Please insert <strong>TSR</strong></li>";
+        }
+
+        if (vin.length != 17) {
+            if (vin.length > 0) {
+
+                $('#vin').addClass('error');
+                error = error + "<li>Please check <strong>VIN</strong></li>";
+            } else {
+                if ((make == '' || model == '' || year == 0 || model_type == '')) {
+                    error = error + "<li>Please input VIN  <strong>or</strong> select YEAR , MAKE , MODEL , TYPE</li>";
+                }
+            }
+
+
+        }
+
+
+        if (error != '') {
+            $('#rates_box_error').html(error).show();
+
+            return false;
+        }
+        else {
+            $('#control-bar').before('<div class="loading-mask" style="z-index:99999"><span>Loading</span></div>');
+        }
+
+        $('#start_quote_form').submit();
+
+    });
+
+    $('#btn_cancel_quote').click(function () {
+
+        window.open('', '_parent', '');
+        window.close();
+    });
+
+    $("#start_quote_form").bind("keypress", function (e) {
+        if (e.keyCode == 13) return false;
+    });
+
+    $("#phone").mask("(999) 999-9999");
+    $("#phone2").mask("(999) 999-9999");
+
+
+    $('.modal-search').click(function (event) {
+        // Prevent link opening
+        event.preventDefault();
+
+        // Open modal
+
+
+        $.modal({
+            title: 'Search Quote',
+            width: 280,
+            url: "http://ecsrates.gotquotes.com/index.php/search/search_quote",
+            buttons: {
+
+                'Close': function (win) {
+                    win.closeModal();
+                },
+                'Search': function (win) {
+
+                    var src_quote_id = $('#src_quote_id').val().trim();
+                    $('#src_msg').html('<p class="message loading">Searching</p>');
+                    $.ajax({
+                        type: "POST",
+                        data: "quote_id=" + src_quote_id,
+                        url: "http://ecsrates.gotquotes.com/index.php/search/search_quote",
+                        success: function (msg) {
+                            if (msg != '') {
+                                window.location = 'http://ecsrates.gotquotes.com/index.php/search/get_quote/' + msg;
+                            } else {
+                                $('#src_msg').html('<p class="message error">Quote not found</p>');
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        $('.modal-button:last').addClass('red');
+    });
+
+    function trim()
+    {
+        return this.replace(/^\s+|\s+$/g, '');
+    }
+
+    $('.modal-search-phone').click(function (event) {
+        event.preventDefault();
+        $.modal({
+            title: 'Search Phone',
+            width: 280,
+            url: "http://ecsrates.gotquotes.com/index.php/search/search_phone",
+            buttons: {
+
+                'Close': function (win) {
+                    win.closeModal();
+                },
+                'Search': function (win) {
+                    if ($('#src_phone').val().length == 14) {
+                        var src_phone = $('#src_phone').val();
+                        $('#src_msg').html('<p class="message loading">Searching</p>');
+                        $.ajax({
+                            type: "POST",
+                            data: "phone=" + src_phone,
+                            url: "http://ecsrates.gotquotes.com/index.php/search/search_phone",
+                            success: function (msg) {
+                                if (msg != '') {
+                                    window.location = 'http://ecsrates.gotquotes.com/index.php/search/get_quote/' + msg;
+                                } else {
+                                    $('#src_msg').html('<p class="message error">Quote not found</p>');
+                                }
+                            }
+                        });
+                    } else {
+                        $('#src_msg').html('<p class="message error">Enter full phone number</p>');
+                    }
+                }
+            }
+        });
+        $('.modal-button:last').addClass('red');
+    });
+
+    $('.modal-search-tsr').click(function (event) {
+        event.preventDefault();
+
+        $.modal({
+            title: 'Search by TSR',
+            width: 600,
+            url: "http://ecsrates.gotquotes.com/index.php/search/search_by_tsr",
+            buttons: {
+                'Close': function (win) {
+                    win.closeModal();
+                },
+                'Search': function (win) {
+                    if ($('#date_from').val() && $('#date_to').val() && $('#search_tsr').val()) {
+                        var temp1 = $('#date_from').val().split('http://ecsrates.gotquotes.com/');
+                        var date_from = temp1[2] + '-' + temp1[0] + '-' + temp1[1];
+                        var temp2 = $('#date_to').val().split('http://ecsrates.gotquotes.com/');
+                        var date_to = temp2[2] + '-' + temp2[0] + '-' + temp2[1];
+                        var search_tsr = $('#search_tsr').val();
+                        $('#src_msg').html('<p class="message loading">Searching</p>');
+                        $.ajax({
+                            type: "POST",
+                            data: "date_from=" + date_from + "&date_to=" + date_to + "&search_tsr=" + search_tsr,
+                            url: "http://ecsrates.gotquotes.com/index.php/search/search_by_tsr",
+                            success: function (msg) {
+                                if (msg == 'false') {
+                                    $('#src_msg').html('<p class="message error">Quotes not found</p>');
+                                } else {
+                                    window.location = 'http://ecsrates.gotquotes.com/index.php/search/list_of_quotes_by_tsr/' + date_from + '/' + date_to + '/' + search_tsr;
+                                }
+                            }
+                        });
+                    } else {
+                        $('#src_msg').html('<p class="message error">All fields are required</p>');
+                        $('#date_from').addClass('error');
+                        $('#date_to').addClass('error');
+                        $('#search_tsr').addClass('error');
+                    }
+                }
+            }
+        });
+        $('.modal-button:last').addClass('red');
+    });
+});
+
+</script>
+<!-- Always visible control bar -->
+<div id="control-bar" class="grey-bg clearfix" style="display: none;">
+
+</div>
+<!-- End control bar -->
+<!-- Content -->
+<article class="container_12">
+<section class="grid_2">
+</section>
+<section class="grid_8">
+
+<div class="relative">
+<!-- Tabs on the right -->
+<ul class="action-tabs right with-children-tip children-tip-right">
+    <li><a href="#" title="Search Quote" class="modal-search"><img src="../../../images/icons/fugue/application-search-result.png" border="0" width="16"   /></a>
+    </li>
+    <li><a href="#" title="Search by Phone Number" class="modal-search-phone"><img src="../../../images/icons/fugue/mobile-phone.png" border="0" width="16"   /></a>
+    </li>
+    <li><a href="#" title="Search by TSR" class="modal-search-tsr"><img src="../../../images/icons/fugue/clipboard-search-result.png" border="0" width="16"   /></a>
+    </li>
+</ul>
+<div class="block-border">
+<!-- Quote Terms - Price box -->
+<div class="block-content" id="rates_box">
+<div class="block-controls form">
+    &nbsp;
+</div>
+
+
+<ul class="message error no-margin" style="display: none;" id="rates_box_error">
+
+</ul>
+<div id="quote_content">
+    <form class="form" id="start_quote_form" method="post" action="http://ecsrates.gotquotes.com/index.php/rates/start_quote">
+        <!-- Use the class js-tabs to enable JS tabs script -->
+        <div class="columns">
+            <div class="colx2-left">
+                <fieldset>
+                    <legend><img src="../../../images/icons/fugue/user.png" border="0" width=""   /> Personal Info.</legend>
+                    <div class="columns">
+                        <div class="colx2-left">
+                            <p class="">
+                                <label class="">
+                                    First Name
+                                </label>
+                                <input type="text" name="first_name" id="first_name"
+                                       value="" class="full-width" autocomplete="off">
+                            </p>
+                        </div>
+                        <div class="colx2-right">
+                            <p class="">
+                                <label>
+                                    Last Name
+                                </label>
+                                <input type="text" name="last_name" id="last_name" value=""
+                                       class="full-width" autocomplete="off">
+                            </p>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="colx2-left">
+                            <p class="">
+                                <label class="">
+                                    Phone
+                                </label>
+                                <input type="text" name="phone" id="phone" value=""
+                                       class="full-width" autocomplete="off">
+                            </p>
+                        </div>
+                        <div class="colx2-right">
+                            <p class="">
+                                <label>
+                                    Alt. Phone
+                                </label>
+                                <input type="text" name="phone2" id="phone2" value="" class="full-width"
+                                       autocomplete="off">
+                            </p>
+                        </div>
+                    </div>
+                    <p class="">
+                        <label class="">
+                            Address
+                        </label>
+                        <input type="text" name="address" value="" class="full-width"
+                               autocomplete="off">
+                    </p>
+
+                    <div class="columns">
+                        <!-- Left column -->
+                        <div class="colx3-left">
+                            <p class="">
+                                <label class="">
+                                    City
+                                </label>
+                                <input type="text" name="city" value="" class="full-width"
+                                       autocomplete="off">
+                            </p>
+                        </div>
+                        <!-- Center column -->
+                        <div class="colx3-center">
+                            <p class="">
+                                <label class="required">
+    														<span class="">
+    															State
+    														</span>
+                                </label>
+                                <select name="state" class="full-width" id="state">
+<option value="" selected="selected">--</option>
+<option value="AA">AA</option>
+<option value="AE">AE</option>
+<option value="AK">AK</option>
+<option value="AL">AL</option>
+<option value="AP">AP</option>
+<option value="AR">AR</option>
+<option value="AS">AS</option>
+<option value="AZ">AZ</option>
+<option value="CA">CA</option>
+<option value="CO">CO</option>
+<option value="CT">CT</option>
+<option value="DC">DC</option>
+<option value="DE">DE</option>
+<option value="FL">FL</option>
+<option value="FM">FM</option>
+<option value="GA">GA</option>
+<option value="GU">GU</option>
+<option value="HI">HI</option>
+<option value="IA">IA</option>
+<option value="ID">ID</option>
+<option value="IL">IL</option>
+<option value="IN">IN</option>
+<option value="KS">KS</option>
+<option value="KY">KY</option>
+<option value="LA">LA</option>
+<option value="MA">MA</option>
+<option value="MD">MD</option>
+<option value="ME">ME</option>
+<option value="MH">MH</option>
+<option value="MI">MI</option>
+<option value="MN">MN</option>
+<option value="MO">MO</option>
+<option value="MP">MP</option>
+<option value="MS">MS</option>
+<option value="MT">MT</option>
+<option value="NC">NC</option>
+<option value="ND">ND</option>
+<option value="NE">NE</option>
+<option value="NH">NH</option>
+<option value="NJ">NJ</option>
+<option value="NM">NM</option>
+<option value="NV">NV</option>
+<option value="NY">NY</option>
+<option value="OH">OH</option>
+<option value="OK">OK</option>
+<option value="OR">OR</option>
+<option value="PA">PA</option>
+<option value="PR">PR</option>
+<option value="PW">PW</option>
+<option value="RI">RI</option>
+<option value="SC">SC</option>
+<option value="SD">SD</option>
+<option value="TN">TN</option>
+<option value="TX">TX</option>
+<option value="UT">UT</option>
+<option value="VA">VA</option>
+<option value="VI">VI</option>
+<option value="VT">VT</option>
+<option value="WA">WA</option>
+<option value="WI">WI</option>
+<option value="WV">WV</option>
+<option value="WY">WY</option>
+</select>                            </p>
+                        </div>
+                        <!-- Right column -->
+                        <div class="colx3-right">
+                            <p class="">
+                                <label class="">
+                                    Zip
+                                </label>
+                                <input type="text" name="zip" value="" class="full-width"
+                                       autocomplete="off">
+                            </p>
+                        </div>
+                    </div>
+                    <p class="">
+                        <label class="">
+                            Email
+                        </label>
+                        <input type="text" name="email" value="" class="full-width" autocomplete="off">
+                    </p>
+                </fieldset>
+            </div>
+            <div class="colx2-right">
+                <fieldset>
+                    <legend><img src="../../../images/icons/fugue/car.png" border="0" width=""   /> Vehicle info.</legend>
+                    <p class="">
+                        <label class="">
+												<span class="">
+													VIN
+												</span>
+                        </label>
+                        <input type="text" name="vin" id="vin" value="" class="full-width"
+                               autocomplete="off">
+                    </p>
+                    <fieldset class="grey-bg">
+
+                        <p class="inline-mini-label">
+                            <label class="">
+													<span class="">
+														Year
+													</span>
+                            </label>
+                            <select name="year" class="full-width" id="year">
+<option value="2023">2023</option>
+<option value="2022">2022</option>
+<option value="2021">2021</option>
+<option value="2020">2020</option>
+<option value="2019">2019</option>
+<option value="2018">2018</option>
+<option value="2017">2017</option>
+<option value="2016">2016</option>
+<option value="2015">2015</option>
+<option value="2014">2014</option>
+<option value="2013">2013</option>
+<option value="2012">2012</option>
+<option value="2011">2011</option>
+<option value="2010">2010</option>
+<option value="2009">2009</option>
+<option value="2008">2008</option>
+<option value="2007">2007</option>
+<option value="2006">2006</option>
+<option value="0" selected="selected">-- Please Select --</option>
+</select>                        </p>
+
+                        <p class="inline-mini-label">
+                            <label class="">
+													<span class="">
+														Make
+													</span>
+                            </label>
+                            <select name="make" id="make" class="full-width">
+                                <option value="">
+                                    -- Select Year --
+                                </option>
+                            </select>
+                        </p>
+                        <p class="inline-mini-label">
+                            <label class="">
+													<span class="">
+														Model
+													</span>
+                            </label>
+                            <select name="model" id="model" class="full-width">
+                                <option value="">
+                                </option>
+                            </select>
+                        </p>
+                        <p class="inline-mini-label">
+                            <label class="">
+													<span class="">
+														Type
+													</span>
+                            </label>
+                            <select name="model_type" id="model_type" class="full-width">
+                                <option value="1">
+                                </option>
+                            </select>
+                        </p>
+                    </fieldset>
+                    <div class="columns">
+                        <div class="colx2-left">
+                            <p class="inline-mini-label">
+                                <label class="">
+    												<span class="">
+    													Mileage
+    												</span>
+                                </label>
+                                <input type="text" name="milage" id="milage" value=""
+                                       class="full-width" autocomplete="off">
+                            </p>
+                        </div>
+                        <div class="colx2-right">
+                            <p class="inline-mini-label">
+                                <label class="">
+    												<span class="">
+    													TSR
+    												</span>
+                                </label>
+                                <input type="text" name="tsr" id="tsr" value="mycampaign"
+                                       class="full-width" autocomplete="off">
+                            </p>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+        </div>
+
+        <p class="align-center grey-bg">
+            <input type="hidden" name="user_id" value="8QJuLXiOBU9l8Qdsp9xlEdB8FT9TneU~bp6T0fE67iGivBJXn98ZSgQiqSz~NYO92S6cNnub7BxJPNpmby.USg--"/>
+            <input type="hidden" name="list_code" value=""/>
+            <button type="button" class="big  " id="btn_cancel_quote"> Cancel</button>
+
+            <button type="button" class="big red " id="sq_btn">
+                Get Quote
+            </button>
+
+
+        </p>
+    </form>
+</div>
+</div>
+</div>
+</div>
+</section>
+<div class="clear">
+
+</div>
+
+
+</article>
+<!-- End content -->				
